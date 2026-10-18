@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function HomeScreen() {
   return (
     <View style={styles.page}>
-      <View style={styles.phone}>
+      <View style={styles.gameScreen}>
         <Text style={styles.title}>Tiny Island</Text>
         <Text style={styles.subtitle}>Your island awaits.</Text>
       </View>
@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  phone: {
+  gameScreen: {
     alignItems: 'center',
+    aspectRatio: 16 / 9,
     backgroundColor: '#fffdf4',
     borderRadius: 28,
     boxShadow: '0 10px 30px rgba(28, 78, 92, 0.16)',
     justifyContent: 'center',
-    maxWidth: 430,
-    minHeight: 720,
+    maxWidth: 960,
     padding: 32,
     width: '100%',
   },
