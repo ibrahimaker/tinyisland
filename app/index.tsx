@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { useMemo, useRef, useState } from 'react';
-import { ImageBackground, PanResponder, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, PanResponder, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 type Screen = 'menu' | 'island' | 'settings';
 
 const menuArt = require('../assets/menu-coastal-farm.png');
-const islandArt = require('../assets/island-world.png');
+const islandGround = require('../assets/island-ground.png');
+const treeOak = require('../assets/tree-oak.png');
+const treePine = require('../assets/tree-pine.png');
+const coastalRocks = require('../assets/rocks-coastal.png');
 
 export default function HomeScreen() {
   const [screen, setScreen] = useState<Screen>('menu');
@@ -23,13 +26,17 @@ export default function HomeScreen() {
 
   if (screen === 'island') {
     return <SafeAreaView style={styles.app}>
-      <ImageBackground
-        source={islandArt}
-        resizeMode="cover"
-        style={styles.islandScene}
-        imageStyle={{ transform: [{ translateX: camera.x }, { translateY: camera.y }, { scale: zoom }] }}
-        {...panResponder.panHandlers}
-      >
+      <View style={styles.islandScene} {...panResponder.panHandlers}>
+        <View pointerEvents="none" style={[styles.worldLayer, { transform: [{ translateX: camera.x }, { translateY: camera.y }, { scale: zoom }] }]}>
+          <ImageBackground source={islandGround} resizeMode="cover" style={styles.groundLayer}>
+            <Image source={coastalRocks} resizeMode="contain" style={[styles.worldAsset, styles.rockA]} />
+            <Image source={coastalRocks} resizeMode="contain" style={[styles.worldAsset, styles.rockB]} />
+            <Image source={treeOak} resizeMode="contain" style={[styles.worldAsset, styles.treeOakA]} />
+            <Image source={treeOak} resizeMode="contain" style={[styles.worldAsset, styles.treeOakB]} />
+            <Image source={treePine} resizeMode="contain" style={[styles.worldAsset, styles.treePineA]} />
+            <Image source={treePine} resizeMode="contain" style={[styles.worldAsset, styles.treePineB]} />
+          </ImageBackground>
+        </View>
         <View pointerEvents="none" style={styles.topHud}>
           <View style={styles.levelChip}><Text style={styles.levelText}>Lv. 1</Text></View>
           <View style={styles.resources}><Resource label="ALTIN" value="1.250" tone="gold" /><Resource label="ELMAS" value="50" tone="blue" /></View>
@@ -45,7 +52,7 @@ export default function HomeScreen() {
         </View>
         <Pressable style={styles.backButton} onPress={() => setScreen('menu')}><Text style={styles.backText}>MENÜ</Text></Pressable>
         <View pointerEvents="none" style={styles.cameraHint}><Text style={styles.cameraHintText}>Sürükle: kamerayı hareket ettir</Text></View>
-      </ImageBackground><StatusBar style="light" />
+      </View><StatusBar style="light" />
     </SafeAreaView>;
   }
 
@@ -85,6 +92,7 @@ const styles = StyleSheet.create({
   goldButton: { backgroundColor: '#ee9d1c' }, goldMark: { backgroundColor: '#ffcf3f' }, greenButton: { backgroundColor: '#4baf29' },
   hudButton: { alignItems: 'center', backgroundColor: '#ebfaf5', borderColor: '#7fbfb8', borderRadius: 14, borderWidth: 2, height: 54, justifyContent: 'center', shadowColor: '#073a3c', shadowOpacity: 0.25, shadowRadius: 7, width: 62 },
   hudButtonText: { color: '#245a58', fontSize: 9, fontWeight: '900' },
+  groundLayer: { flex: 1 },
   islandScene: { backgroundColor: '#159bd0', flex: 1, overflow: 'hidden' }, leftRail: { gap: 8, left: 20, position: 'absolute', top: 104 },
   levelChip: { backgroundColor: '#295f36', borderColor: '#b5ef83', borderRadius: 18, borderWidth: 2, paddingHorizontal: 14, paddingVertical: 8 }, levelText: { color: 'white', fontSize: 14, fontWeight: '900' },
   logoIsland: { color: '#fff6df', fontSize: 47, fontWeight: '900', letterSpacing: 1, lineHeight: 48, textShadowColor: '#5a2c12', textShadowOffset: { height: 4, width: 0 }, textShadowRadius: 2 },
@@ -100,5 +108,13 @@ const styles = StyleSheet.create({
   resource: { alignItems: 'center', backgroundColor: 'rgba(12,48,64,0.86)', borderColor: 'rgba(255,255,255,0.32)', borderRadius: 18, borderWidth: 1, flexDirection: 'row', gap: 7, minWidth: 101, paddingHorizontal: 10, paddingVertical: 6 }, resourceLabel: { color: '#c8e7ee', fontSize: 8, fontWeight: '800', letterSpacing: 0.6 }, resourceMark: { borderColor: '#fff8d5', borderRadius: 10, borderWidth: 2, height: 20, width: 20 }, resourceValue: { color: '#fffdf6', fontSize: 17, fontWeight: '900', lineHeight: 19 }, resources: { flexDirection: 'row', gap: 8 },
   settingsCard: { alignItems: 'center', backgroundColor: 'rgba(31,77,88,0.95)', borderColor: '#fff2c4', borderRadius: 22, borderWidth: 2, padding: 20, width: 250 }, settingsCopy: { color: '#e5f6f1', fontSize: 13, lineHeight: 18, marginBottom: 16, textAlign: 'center' }, settingsTitle: { color: '#ffe06c', fontSize: 20, fontWeight: '900', marginBottom: 9 },
   topHud: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', left: 20, position: 'absolute', right: 20, top: 18 },
+  worldAsset: { position: 'absolute' },
+  worldLayer: { bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 },
+  rockA: { bottom: '10%', height: 90, left: '8%', width: 130 },
+  rockB: { height: 72, right: '11%', top: '42%', width: 102 },
+  treeOakA: { height: 175, left: '13%', top: '18%', width: 170 },
+  treeOakB: { height: 128, right: '12%', top: '19%', width: 123 },
+  treePineA: { height: 148, right: '23%', top: '48%', width: 118 },
+  treePineB: { bottom: '18%', height: 116, left: '31%', width: 94 },
   zoomButton: { alignItems: 'center', backgroundColor: '#fdf0ca', borderColor: '#946430', borderRadius: 17, borderWidth: 2, height: 38, justifyContent: 'center', width: 38 }, zoomText: { color: '#6e4927', fontSize: 24, fontWeight: '900', lineHeight: 26 },
 });
