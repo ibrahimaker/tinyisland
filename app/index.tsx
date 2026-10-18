@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useMemo, useRef, useState } from 'react';
-import { Image, ImageBackground, PanResponder, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, PanResponder, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 type Screen = 'menu' | 'island' | 'settings';
 
@@ -23,8 +23,13 @@ export default function HomeScreen() {
 
   if (screen === 'island') {
     return <SafeAreaView style={styles.app}>
-      <View style={styles.islandScene} {...panResponder.panHandlers}>
-        <Image source={islandArt} resizeMode="cover" style={[styles.islandArt, { transform: [{ translateX: camera.x }, { translateY: camera.y }, { scale: zoom }] }]} />
+      <ImageBackground
+        source={islandArt}
+        resizeMode="cover"
+        style={styles.islandScene}
+        imageStyle={{ transform: [{ translateX: camera.x }, { translateY: camera.y }, { scale: zoom }] }}
+        {...panResponder.panHandlers}
+      >
         <View pointerEvents="none" style={styles.topHud}>
           <View style={styles.levelChip}><Text style={styles.levelText}>Lv. 1</Text></View>
           <View style={styles.resources}><Resource label="ALTIN" value="1.250" tone="gold" /><Resource label="ELMAS" value="50" tone="blue" /></View>
@@ -40,7 +45,7 @@ export default function HomeScreen() {
         </View>
         <Pressable style={styles.backButton} onPress={() => setScreen('menu')}><Text style={styles.backText}>MENÜ</Text></Pressable>
         <View pointerEvents="none" style={styles.cameraHint}><Text style={styles.cameraHintText}>Sürükle: kamerayı hareket ettir</Text></View>
-      </View><StatusBar style="light" />
+      </ImageBackground><StatusBar style="light" />
     </SafeAreaView>;
   }
 
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
   goldButton: { backgroundColor: '#ee9d1c' }, goldMark: { backgroundColor: '#ffcf3f' }, greenButton: { backgroundColor: '#4baf29' },
   hudButton: { alignItems: 'center', backgroundColor: '#ebfaf5', borderColor: '#7fbfb8', borderRadius: 14, borderWidth: 2, height: 54, justifyContent: 'center', shadowColor: '#073a3c', shadowOpacity: 0.25, shadowRadius: 7, width: 62 },
   hudButtonText: { color: '#245a58', fontSize: 9, fontWeight: '900' },
-  islandArt: { height: '100%', position: 'absolute', width: '100%' }, islandScene: { backgroundColor: '#159bd0', flex: 1, overflow: 'hidden' }, leftRail: { gap: 8, left: 20, position: 'absolute', top: 104 },
+  islandScene: { backgroundColor: '#159bd0', flex: 1, overflow: 'hidden' }, leftRail: { gap: 8, left: 20, position: 'absolute', top: 104 },
   levelChip: { backgroundColor: '#295f36', borderColor: '#b5ef83', borderRadius: 18, borderWidth: 2, paddingHorizontal: 14, paddingVertical: 8 }, levelText: { color: 'white', fontSize: 14, fontWeight: '900' },
   logoIsland: { color: '#fff6df', fontSize: 47, fontWeight: '900', letterSpacing: 1, lineHeight: 48, textShadowColor: '#5a2c12', textShadowOffset: { height: 4, width: 0 }, textShadowRadius: 2 },
   logoLockup: { left: 36, position: 'absolute', top: 28 }, logoTagline: { color: '#fff8df', fontSize: 13, fontWeight: '800', marginTop: 10, textShadowColor: '#23421b', textShadowOffset: { height: 2, width: 0 }, textShadowRadius: 2 },
